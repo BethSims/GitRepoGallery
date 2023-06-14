@@ -2,6 +2,10 @@
 const overview = document.querySelector(".overview");
 //Selects the UL to display repos in
 const repoList = document.querySelector(".repo-list");
+//Selects section where repos will appear
+const repoSection = document.querySelector(".repos");
+//Selects section where individual repo data will appear
+const repoDetails = document.querySelector(".repo-data");
 //Creates a variable to pass the username
 const username = "BethSims";
 
@@ -48,4 +52,19 @@ const displayRepoData = function(repos) {
     li.innerHTML = `<h3>${repo.name}</h3>`;
     repoList.append(li);
   };
+};
+
+repoList.addEventListener("click", function(e) {
+  if (e.target.matches("h3")) {
+    const repoName = e.target.innerText;
+    fetchRepoDetails(repoName);
+  }
+});
+
+const fetchRepoDetails = async function(repoName) {
+  const request = await fetch(`https://api.github.com/repos/${username}/${repoName}`);
+  const repoInfo = await request.json();
+  const fetchLanguages = await fetch(repoInfo.language_url);
+  const languageData = await fetchLanguages.json;
+  console.log(languageData);
 };
