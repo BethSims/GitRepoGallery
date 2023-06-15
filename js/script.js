@@ -6,6 +6,10 @@ const repoList = document.querySelector(".repo-list");
 const repoSection = document.querySelector(".repos");
 //Selects section where individual repo data will appear
 const repoDetails = document.querySelector(".repo-data");
+//Selects the Back to Repo Gallery button
+const backButton = document.querySelector(".view-repos");
+//Selects the search input
+const filterInput = document.querySelector(".filter-repos");
 //Creates a variable to pass the username
 const username = "BethSims";
 
@@ -46,6 +50,7 @@ const fetchRepos = async function() {
 };
 
 const displayRepoData = function(repos) {
+  filterInput.classList.remove("hide");
   for (const repo of repos) {
     const li = document.createElement("li");
     li.classList.add("repo");
@@ -64,7 +69,7 @@ repoList.addEventListener("click", function(e) {
 const fetchRepoDetails = async function(repoName) {
   const request = await fetch(`https://api.github.com/repos/${username}/${repoName}`);
   const repoInfo = await request.json();
-  console.log(repoInfo);
+  // console.log(repoInfo);
   const fetchLanguages = await fetch(repoInfo.languages_url);
   const languageData = await fetchLanguages.json();
   // console.log(languageData);
@@ -85,8 +90,20 @@ const displayRepoDetails = function(repoInfo, languages) {
       <p>Default Branch: ${repoInfo.default_branch}</p>
       <p>Languages: ${languages.join(", ")}</p>
       <a class="visit" href="${repoInfo.html_url}" target="_blank" rel="noreferrer noopener">View Repo on GitHub!</a>
-  `
+  `;
   repoDetails.append(div);
   repoDetails.classList.remove("hide");
   repoSection.classList.add("hide");
+  backButton.classList.remove("hide");
 };
+
+backButton.addEventListener("click", function () {
+  repoSection.classList.remove("hide");
+  repoDetails.classList.add("hide");
+  backButton.classList.add("hide");
+});
+
+filterInput.addEventListener("input", function(e){
+  const searchInput = filterInput.value;
+  console.log(searchInput);
+});
