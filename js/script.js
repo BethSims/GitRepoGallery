@@ -105,5 +105,15 @@ backButton.addEventListener("click", function () {
 
 filterInput.addEventListener("input", function(e){
   const searchInput = filterInput.value;
-  console.log(searchInput);
+  // console.log(searchInput);
+  const repos = document.querySelectorAll(".repo");
+  const searchText = searchInput.toLowerCase();
+  for (const repo of repos) {
+    const repoName = repo.innerText.toLowerCase();
+    if (repoName.includes(searchText)) {
+      repo.classList.remove("hide");
+    } else {
+      repo.classList.add("hide");
+    };
+  };
 });
