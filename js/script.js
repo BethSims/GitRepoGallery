@@ -36,7 +36,7 @@ const displayUserData = function(data) {
           <p><strong>Location:</strong> ${data.location}</p>
           <p><strong>Number of public repos:</strong> ${data.public_repos}</p>
         </div> 
-    ` 
+    `;
     overview.append(userInfo);
 
     fetchRepos();
@@ -84,13 +84,24 @@ const fetchRepoDetails = async function(repoName) {
 const displayRepoDetails = function(repoInfo, languages) {
   repoDetails.innerHTML= "";
   const div = document.createElement("div");
-  div.innerHTML = `
-    <h3>Name: ${repoInfo.name}</h3>
-      <p>Description: ${repoInfo.description}</p>
-      <p>Default Branch: ${repoInfo.default_branch}</p>
-      <p>Languages: ${languages.join(", ")}</p>
-      <a class="visit" href="${repoInfo.html_url}" target="_blank" rel="noreferrer noopener">View Repo on GitHub!</a>
-  `;
+  if (repoInfo.homepage == "" || repoInfo.homepage.includes("GitRepoGallery")) {
+   div.innerHTML = `
+      <h3>Name: ${repoInfo.name}</h3>
+        <p>Description: ${repoInfo.description}</p>
+        <p>Default Branch: ${repoInfo.default_branch}</p>
+        <p>Languages: ${languages.join(", ")}</p>
+        <a class="visit" href="${repoInfo.html_url}" target="_blank" rel="noreferrer noopener">View Repo on GitHub!</a>
+    `;
+  } else {
+    div.innerHTML = `
+      <h3>Name: ${repoInfo.name}</h3>
+        <p>Description: ${repoInfo.description}</p>
+        <p>Default Branch: ${repoInfo.default_branch}</p>
+        <p>Languages: ${languages.join(", ")}</p>
+        <a class="visit" href="${repoInfo.homepage}" target="_blank" rel="noreferrer noopener">View project in action!</a>
+        <a class="visit" href="${repoInfo.html_url}" target="_blank" rel="noreferrer noopener">View Repo on GitHub!</a>
+    `;
+  }
   repoDetails.append(div);
   repoDetails.classList.remove("hide");
   repoSection.classList.add("hide");
@@ -114,6 +125,6 @@ filterInput.addEventListener("input", function(e){
       repo.classList.remove("hide");
     } else {
       repo.classList.add("hide");
-    };
-  };
+    }
+  }
 });
